@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'editor',
     'review',
     'viewer',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -56,10 +57,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'sunExpress.urls'
-
+CORS_ALLOWED_ORIGINS = [
+    "https://sunexpress.onrender.com",
+    # Add any other allowed origins as needed
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

@@ -2,6 +2,7 @@ asgiref
 crispy-bootstrap5
 crispy-tailwind
 Django
+django-cors-headers
 django-crispy-forms
 django-environ
 django-filter
