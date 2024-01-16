@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-!j60%v9y-s++qf7gg%0&*ry3!744g*))a3%175xwpxuk536p_)
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = ['https://sunexpress.onrender.com','https://*.127.0.0.1']
 
 # Application definition
 
