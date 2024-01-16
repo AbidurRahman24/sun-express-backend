@@ -20,8 +20,8 @@ class EditorViewset(viewsets.ModelViewSet):
     queryset = models.Editor.objects.all()
     serializer_class = serializers.EditorSerializer
 
-    
-class UserRegistrationApiView(viewsets.ModelViewSet):
+
+class UserRegistrationApiView(APIView):
     queryset = models.Editor.objects.all()
     serializer_class = serializers.RegistrationSerializer
     

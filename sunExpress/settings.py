@@ -62,10 +62,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'sunExpress.urls'
-CORS_ALLOWED_ORIGINS = [
-    "https://sunexpress.onrender.com",
-    # Add any other allowed origins as needed
-]
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -84,6 +83,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sunExpress.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    'https://sunexpress.onrender.com',  # Assuming your frontend runs on port 3000
+    # ... other origins you want to allow
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    # ... other headers you want to allow
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
