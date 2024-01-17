@@ -2,7 +2,7 @@ from django.db import models
 from category.models import Category
 from editor.models import Editor
 from viewer.models import Viewer
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class Article(models.Model):
     headline = models.CharField(max_length=200)
@@ -18,18 +18,12 @@ class Article(models.Model):
     def __str__(self):
         return self.headline
     
-STAR_CHOICES = [
-    ('⭐', '⭐'),
-    ('⭐⭐', '⭐⭐'),
-    ('⭐⭐⭐', '⭐⭐⭐'),
-    ('⭐⭐⭐⭐', '⭐⭐⭐⭐'),
-    ('⭐⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'),
-]
+
 class Review(models.Model):
     viewer = models.ForeignKey(Viewer, on_delete = models.CASCADE)
     article = models.ForeignKey(Article, on_delete = models.CASCADE)
     created = models.DateTimeField(auto_now_add = True)
-    rating = models.CharField(choices = STAR_CHOICES, max_length = 10)
+    rating = models.IntegerField(choices=[(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')])
     
     def __str__(self):
         return f"Viewer : {self.viewer.user.first_name} ; Article {self.article.headline}"
