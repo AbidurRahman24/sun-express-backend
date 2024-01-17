@@ -8,7 +8,7 @@ class ArticleForSpecificCategory(filters.BaseFilterBackend):
     def filter_queryset(self, request, query_set, view):
         article_id = request.query_params.get("article_id")
         if article_id:
-            return query_set.filter(article = article_id)
+            return query_set.filter(article_id = article_id)
         return query_set
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = models.Category.objects.all()

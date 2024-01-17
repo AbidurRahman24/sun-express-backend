@@ -4,7 +4,6 @@ from . import models
 class ArticleSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField(many=False)
     editor = serializers.StringRelatedField(many=False)
-    # doctor = serializers.StringRelatedField(many=False)
     class Meta:
         model = models.Article
         fields = '__all__'
