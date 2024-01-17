@@ -5,6 +5,7 @@ from . import serializers
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from rest_framework.response import Response
+from rest_framework import filters
 # Create your views here.
 def send_transaction_email(user, rating, subject, template):
         message = render_to_string(template, {
@@ -17,6 +18,8 @@ def send_transaction_email(user, rating, subject, template):
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = models.Article.objects.all()
     serializer_class =  serializers.ArticleSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__first_name', 'user__email', 'category__name', ]
 
 class ReviewViewset(viewsets.ModelViewSet):
     # user = 
