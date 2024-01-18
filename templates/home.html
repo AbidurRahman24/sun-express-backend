@@ -1,28 +1,39 @@
-{% extends 'base.html' %} {% block content %}
-<div class="d-flex flex-wrap justify-content-center px-5 pt-5">
-    {% for article in data %}
-    <div class="col-sm-3">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">{{article.headline}}</h5>
-          <p class="card-text">{{article.body}}</p>
-          <p>Author : {{article.editor.user.first_name}}</p>
-          <p>Author : {{article.category.name}}</p>
-          {% if request.user.is_authenticated %}
-          <a href="{% url 'edit_article' article.id %}" class="btn btn-warning">Edit</a>
-          <a href="{% url 'delete_article' article.id %}" class="btn btn-danger">Delete</a>
-          {% endif %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <h4>{{data | length}} results found</h4>
+        <div class="col-md-9">
+          <div class="d-flex flex-wrap m-2 pt-5">
+            {% for post in data %}
+            <div class="col-sm-6">
+              <div class="card-body">
+                <img src="{{post.image.url}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{post.headline}}</h5>
+                  <p class="card-text">{{post.body|truncatewords:50}}</p>
+                  <p>Author : {{post.editor.user.first_name}}</p>
+                  <p>Category : {{post.category.name}}</p>
+                  <button class="btn btn-info"><a href="{% url 'detail_article' post.id %}"
+                    class="text-decoration-none text-dark">View Details</a></button>
+                  {% if request.user.is_staff %}
+                  <a href="{% url 'edit_article' post.id %}" class="btn btn-warning">Edit</a>
+                  <a href="{% url 'delete_article' post.id %}" class="btn btn-danger">Delete</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
-    {% endfor %}
   </div>
-
-
-
-
-
-
-
-
+</div>
+</div>
 {% endblock %}

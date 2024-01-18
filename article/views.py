@@ -9,15 +9,20 @@ from rest_framework import filters
 from rest_framework import generics
 from . import forms
 from . import models
+from django.views.generic import DetailView
+from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 # Create your views here.
-# def send_transaction_email(user, rating, subject, template):
-#         message = render_to_string(template, {
-#             'user' : user,
-#             'rating' : rating,
-#         })
-#         send_email = EmailMultiAlternatives(subject, '', to=[user.email])
-#         send_email.attach_alternative(message, "text/html")
-#         send_email.send()
+def send_transaction_email(user, amount, subject, template):
+        message = render_to_string(template, {
+            'user' : user,
+            'amount' : amount,
+        })
+        send_email = EmailMultiAlternatives(subject, '', to=[user.email])
+        send_email.attach_alternative(message, "text/html")
+        send_email.send()
+
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = models.Article.objects.all()
     serializer_class =  serializers.ArticleSerializer
@@ -33,7 +38,77 @@ class articleForSpecific(filters.BaseFilterBackend):
         if article_id:
             return query_set.filter(article_id = article_id)
         return query_set
+@method_decorator(login_required, name='dispatch')
+class DetailArticleView(DetailView):
+    model = models.Article
+    pk_url_kwarg = 'id'
+    template_name = 'article_details.html'
+    def post(self, request, *args, **kwargs):
+        comment_form = forms.CommentForm(data=self.request.POST)
+        post = self.get_object()
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+        return self.get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.object
+        comments = post.comments.all()
+        comment_form = forms.CommentForm()
 
+        # Calculate the average rating
+        average_rating = comments.aggregate(Avg('rating'))['rating__avg']
+
+        context['comments'] = comments
+        context['comment_form'] = comment_form
+        context['average_rating'] = round(average_rating, 2) if average_rating else None
+        return context
+
+# @method_decorator(login_required, name='dispatch')
+# class DetailArticleView(DetailView):
+#     model = models.Article
+#     pk_url_kwarg = 'id'
+#     template_name = 'article_details.html'
+
+#     def post(self, request, *args, **kwargs):
+#         comment_form = forms.CommentForm(data=self.request.POST)
+#         post = self.get_object()
+
+#         if comment_form.is_valid():
+#             new_comment = comment_form.save(commit=False)
+#             new_comment.post = post
+#             new_comment.save()
+
+#             # Calculate the average rating
+#             comments = post.comments.all()
+#             average_rating = comments.aggregate(Avg('rating'))['rating__avg']
+
+#             # Send email only if there are comments and the average rating is not None
+#             if comments.exists() and average_rating is not None:
+#                 send_transaction_email(
+#                     request.user,
+#                     average_rating,
+#                     "Rating Update",
+#                     "rating_update_email_template.html"
+#                 )
+
+#         return self.get(request, *args, **kwargs)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         post = self.object
+#         comments = post.comments.all()
+#         comment_form = forms.CommentForm()
+
+#         # Calculate the average rating
+#         average_rating = comments.aggregate(Avg('rating'))['rating__avg']
+
+#         context['comments'] = comments
+#         context['comment_form'] = comment_form
+#         context['average_rating'] = round(average_rating, 2) if average_rating else None
+#         return context
 # class ReviewCreateView(generics.CreateAPIView):
 #     queryset = models.Review.objects.all()
 #     serializer_class = serializers.ReviewSerializer

@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from article.models import Article
+from category.models import Category
+from django.shortcuts import render, redirect
+from . import forms
+
 from rest_framework import viewsets
 from . import models
 from . import serializers
@@ -15,8 +19,6 @@ class CategoryViewset(viewsets.ModelViewSet):
     serializer_class = serializers.CategorySerializer
     filter_backends = [ArticleForSpecificCategory]
 
-from django.shortcuts import render, redirect
-from . import forms
 # Create your views here.
 
 def add_category(request):
@@ -29,3 +31,12 @@ def add_category(request):
     else: 
         category_form = forms.CategoryForm()
     return render(request, 'add_category.html', {'form' : category_form})
+
+def category(request, category_slug = None):
+    
+    data = Article.objects.all() 
+    if category_slug is not None: #
+        category = Category.objects.get(slug = category_slug) 
+        data = Article.objects.filter(category  = category) 
+    categories = Category.objects.all()
+    return render(request, 'categoryPage.html', {'data' : data, 'category' : categories})

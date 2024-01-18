@@ -119,13 +119,14 @@ def user_login(request):
             if user is not None:
                 messages.success(request, 'Logged in Successfully')
                 login(request, user)
-                return redirect('profile')
+                return redirect('homepage')
             else:
-                messages.warning(request, 'Login informtion incorrect')
-                return redirect('register')
+                messages.warning(request, 'Login information incorrect')
+        # If the form is not valid or login fails, render the login page with form errors
     else:
         form = AuthenticationForm()
-        return render(request, 'register.html', {'form' : form, 'type' : 'Login'})
+
+    return render(request, 'register.html', {'form': form, 'type': 'Login'})
 @login_required
 def profile(request):
     if request.method == 'POST':
@@ -138,7 +139,7 @@ def profile(request):
     else:
         profile_form = forms.ChangeUserForm(instance = request.user)
     return render(request, 'profile.html', {'form' : profile_form})
-
+@login_required
 def user_logout(request):
     logout(request)
     return redirect('user_login')
