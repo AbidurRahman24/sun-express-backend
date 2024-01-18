@@ -12,8 +12,6 @@ class Article(models.Model):
     publishing_time = models.DateTimeField(auto_now_add=True)
     ratings = models.IntegerField(default=0)
     editor = models.ForeignKey(Editor, on_delete=models.CASCADE)
-
-    # Additional necessary fields
     image = models.ImageField(upload_to='article/images/', null=True, blank=True)
 
     def __str__(self):

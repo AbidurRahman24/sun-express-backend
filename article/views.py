@@ -24,7 +24,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     # print(filter_backends)
     # search_fields = ['headline', 'body', 'category__name', 'editor__user']
-    search_fields = [ 'category__name', 'category__slug']
+    search_fields = [ 'category__name', 'category__slug', 'ratings']
     
 
 class articleForSpecific(filters.BaseFilterBackend):
@@ -42,8 +42,8 @@ class ReviewViewset(viewsets.ModelViewSet):
     
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
-    filter_backends = [filters.SearchFilter]
-    filter_backends = [articleForSpecific]
+    # filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter,articleForSpecific]
     search_fields = ['rating']
 
     # def list(self, request, *args, **kwargs):

@@ -17,6 +17,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     #     return queryset
         
 class ReviewSerializer(serializers.ModelSerializer):
+    article = serializers.StringRelatedField(many=False)
     viewer_email = serializers.SerializerMethodField()
     class Meta:
         model = models.Review
