@@ -24,3 +24,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_viewer_email(self, obj):
         return obj.viewer.user.email
+        
+# class UserReviewSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Review
+#         fields = '__all__'
