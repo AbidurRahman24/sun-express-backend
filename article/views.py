@@ -25,9 +25,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     # print(filter_backends)
     # search_fields = ['headline', 'body', 'category__name', 'editor__user']
     search_fields = [ 'category__name', 'category__slug']
-    def get_queryset(self):
-        category = self.kwargs['category']
-        return models.Article.objects.filter(category=category)
+    
 
 class articleForSpecific(filters.BaseFilterBackend):
     def filter_queryset(self, request, query_set, view):
