@@ -68,49 +68,51 @@ class DetailArticleView(DetailView):
         context['average_rating'] = round(average_rating, 2) if average_rating else None
         return context
 
-# @method_decorator(login_required, name='dispatch')
-# class DetailArticleView(DetailView):
-#     model = models.Article
-#     pk_url_kwarg = 'id'
-#     template_name = 'article_details.html'
+@method_decorator(login_required, name='dispatch')
+class DetailArticleView(DetailView):
+    model = models.Article
+    pk_url_kwarg = 'id'
+    template_name = 'article_details.html'
 
-#     def post(self, request, *args, **kwargs):
-#         comment_form = forms.CommentForm(data=self.request.POST)
-#         post = self.get_object()
+    def post(self, request, *args, **kwargs):
+        comment_form = forms.CommentForm(data=self.request.POST)
+        post = self.get_object()
 
-#         if comment_form.is_valid():
-#             new_comment = comment_form.save(commit=False)
-#             new_comment.post = post
-#             new_comment.save()
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
 
-#             # Calculate the average rating
-#             comments = post.comments.all()
-#             average_rating = comments.aggregate(Avg('rating'))['rating__avg']
+            # Calculate the average rating
+            comments = post.comments.all()
+            average_rating = comments.aggregate(Avg('rating'))['rating__avg']
 
-#             # Send email only if there are comments and the average rating is not None
-#             if comments.exists() and average_rating is not None:
-#                 send_transaction_email(
-#                     request.user,
-#                     average_rating,
-#                     "Rating Update",
-#                     "rating_update_email_template.html"
-#                 )
+            # Send email only if there are comments and the average rating is not None
+            if comments.exists() and average_rating is not None:
+                send_transaction_email(
+                    request.user,
+                    average_rating,
+                    "Rating Update",
+                    "rating_update_email_template.html"
+                )
 
-#         return self.get(request, *args, **kwargs)
+        return self.get(request, *args, **kwargs)
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         post = self.object
-#         comments = post.comments.all()
-#         comment_form = forms.CommentForm()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.object
+        comments = post.comments.all()
+        comment_form = forms.CommentForm()
 
-#         # Calculate the average rating
-#         average_rating = comments.aggregate(Avg('rating'))['rating__avg']
+        # Calculate the average rating
+        average_rating = comments.aggregate(Avg('rating'))['rating__avg']
 
-#         context['comments'] = comments
-#         context['comment_form'] = comment_form
-#         context['average_rating'] = round(average_rating, 2) if average_rating else None
-#         return context
+        context['comments'] = comments
+        context['comment_form'] = comment_form
+        context['average_rating'] = round(average_rating, 2) if average_rating else None
+        return context
+    
+
 # class ReviewCreateView(generics.CreateAPIView):
 #     queryset = models.Review.objects.all()
 #     serializer_class = serializers.ReviewSerializer

@@ -119,7 +119,7 @@ def register(request):
             # Generate confirmation link
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            confirm_link = f"https://sunexpress.onrender.com/viewer/active/{uid}/{token}"
+            confirm_link = f"https://sunexpress.onrender.com/editor/active/{uid}/{token}"
 
             # Send confirmation email
             email_subject = "Confirm Your Email"
