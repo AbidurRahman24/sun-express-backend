@@ -4,4 +4,5 @@ from .models import Article
 class AritcleForm(forms.ModelForm):
     class Meta: 
         model = Article
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['editor']

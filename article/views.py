@@ -25,16 +25,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
     # print(filter_backends)
     # search_fields = ['headline', 'body', 'category__name', 'editor__user']
     search_fields = [ 'category__name', 'category__slug']
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return models.Article.objects.filter(category=category)
 
-    # def get_queryset(self):
-    #     queryset = models.Article.objects.all()
-    #     search_param = self.request.query_params.get('search', None)
-
-    #     if search_param:
-    #         # Use Q objects to filter by category name
-    #         queryset = queryset.filter(Q(category__name__icontains=search_param))
-
-    #     return queryset
 class articleForSpecific(filters.BaseFilterBackend):
     def filter_queryset(self, request, query_set, view):
         article_id = request.query_params.get("article_id")
@@ -42,9 +36,9 @@ class articleForSpecific(filters.BaseFilterBackend):
             return query_set.filter(article_id = article_id)
         return query_set
 
-class ReviewCreateView(generics.CreateAPIView):
-    queryset = models.Review.objects.all()
-    serializer_class = serializers.ReviewSerializer
+# class ReviewCreateView(generics.CreateAPIView):
+#     queryset = models.Review.objects.all()
+#     serializer_class = serializers.ReviewSerializer
 
 class ReviewViewset(viewsets.ModelViewSet):
     
@@ -69,7 +63,7 @@ def add_article(request):
         article_form = forms.AritcleForm(request.POST)
         if article_form.is_valid():
             article_form.save()
-            return redirect('add_aritcle')
+            return redirect('add_article')
     
     else: # user normally website e gele blank form pabe
         article_form = forms.AritcleForm()

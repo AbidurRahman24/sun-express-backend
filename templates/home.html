@@ -8,8 +8,10 @@
           <p class="card-text">{{article.body}}</p>
           <p>Author : {{article.editor.user.first_name}}</p>
           <p>Author : {{article.category.name}}</p>
+          {% if request.user.is_authenticated %}
           <a href="{% url 'edit_article' article.id %}" class="btn btn-warning">Edit</a>
           <a href="{% url 'delete_article' article.id %}" class="btn btn-danger">Delete</a>
+          {% endif %}
         </div>
       </div>
     </div>

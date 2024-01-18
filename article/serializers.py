@@ -20,7 +20,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     viewer_email = serializers.SerializerMethodField()
     class Meta:
         model = models.Review
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['viewer']
 
     def get_viewer_email(self, obj):
         return obj.viewer.user.email
