@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
 from . import models
 from . import serializers
@@ -9,6 +9,7 @@ from rest_framework import filters
 from rest_framework import generics
 from . import forms
 from . import models
+from editor.models import Editor
 from django.views.generic import DetailView
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
@@ -50,6 +51,7 @@ class DetailArticleView(DetailView):
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
+            
         return self.get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
@@ -131,29 +133,43 @@ class ReviewViewset(viewsets.ModelViewSet):
     #         email.send()
     #         return Response("Check your mail for confirmation")
     #     return super().list(request, *args, **kwargs)
+@login_required
 def add_article(request):
-    if request.method == 'POST': # user post request koreche
-        article_form = forms.AritcleForm(request.POST)
-        if article_form.is_valid():
-            article_form.save()
-            return redirect('add_article')
-    
-    else: # user normally website e gele blank form pabe
-        article_form = forms.AritcleForm()
-    return render(request, 'add_article.html', {'form' : article_form})
-
-
-def edit_article(request, id):
-    article = models.Article.objects.get(pk=id) 
-    article_form = forms.AritcleForm(instance=article)
-    # print(post.title)
     if request.method == 'POST':
-        article = forms.AritcleForm(request.POST, instance=article) 
-        if article_form.is_valid():
-            article_form.save() 
+        post_form = forms.AritcleForm(request.POST)
+        if post_form.is_valid():
+            editor_instance, created = Editor.objects.get_or_create(user=request.user)
+            post_form.instance.editor = editor_instance
+            post_form.save()
+            return redirect('add_article')
+    else:
+        post_form = forms.AritcleForm()
+    return render(request, 'add_article.html', {'form': post_form})
+@login_required
+def edit_article(request, id):
+    post = get_object_or_404(models.Article, pk=id) 
+    post_form = forms.AritcleForm(instance=post)
+
+    if request.method == 'POST':
+        post_form = forms.AritcleForm(request.POST, instance=post)
+        if post_form.is_valid():
+            # Ensure the Editor instance exists for the current user
+            editor_instance, created = Editor.objects.get_or_create(user=request.user)
+            post_form.instance.editor = editor_instance
+            post_form.save()
             return redirect('homepage')
+
+    return render(request, 'edit_article.html', {'form': post_form, 'post': post})
+# def edit_article(request, id):
+#     article = models.Article.objects.get(pk=id) 
+#     article_form = forms.AritcleForm(instance=article)
+#     if request.method == 'POST':
+#         article = forms.AritcleForm(request.POST, instance=article) 
+#         if article_form.is_valid():
+#             article_form.save() 
+#             return redirect('homepage')
     
-    return render(request, 'add_article.html', {'form' : article_form})
+#     return render(request, 'add_article.html', {'form' : article_form})
 
 def delete_article(request, id):
     article = models.Article.objects.get(pk=id) 

@@ -65,7 +65,7 @@ def activate(request, uid64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        return redirect('login')
+        return redirect('user_login')
     else:
         return redirect('register')
     
@@ -97,17 +97,46 @@ class UserLogoutView(APIView):
 
 
 # Editor 
+# def register(request):
+#     if request.method == 'POST':
+#         register_form = forms.RegistrationForm(request.POST)
+#         if register_form.is_valid():
+#             register_form.save()
+            
+#             messages.success(request, 'Account Created Successfully')
+#             return redirect('register')
+    
+#     else:
+#         register_form = forms.RegistrationForm()
+#     return render(request, 'register.html', {'form' : register_form, 'type' : 'Register'})
+
 def register(request):
     if request.method == 'POST':
         register_form = forms.RegistrationForm(request.POST)
         if register_form.is_valid():
-            register_form.save()
-            messages.success(request, 'Account Created Successfully')
-            return redirect('register')
-    
+            user = register_form.save()
+
+            # Generate confirmation link
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            confirm_link = f"https://sunexpress.onrender.com/viewer/active/{uid}/{token}"
+
+            # Send confirmation email
+            email_subject = "Confirm Your Email"
+            email_body = render_to_string('confirm_email.html', {'confirm_link': confirm_link})
+
+            email = EmailMultiAlternatives(email_subject, '', to=[user.email])
+            email.attach_alternative(email_body, "text/html")
+            email.send()
+
+            messages.success(request, 'Account Created Successfully. Please check your email to confirm.')
+            return redirect('user_login')
+
     else:
         register_form = forms.RegistrationForm()
-    return render(request, 'register.html', {'form' : register_form, 'type' : 'Register'})
+
+    return render(request, 'register.html', {'form': register_form, 'type': 'Register'})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -127,8 +156,14 @@ def user_login(request):
         form = AuthenticationForm()
 
     return render(request, 'register.html', {'form': form, 'type': 'Login'})
+
 @login_required
 def profile(request):
+    data = User.objects.filter(instance = request.user)
+    return render(request, 'profile.html', {'data' : data})
+
+@login_required
+def edit_profile(request):
     if request.method == 'POST':
         profile_form = forms.ChangeUserForm(request.POST, instance = request.user)
         if profile_form.is_valid():
@@ -138,7 +173,7 @@ def profile(request):
     
     else:
         profile_form = forms.ChangeUserForm(instance = request.user)
-    return render(request, 'profile.html', {'form' : profile_form})
+    return render(request, 'update_profile.html', {'form' : profile_form})
 @login_required
 def user_logout(request):
     logout(request)

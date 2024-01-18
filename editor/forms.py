@@ -15,6 +15,12 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'staff']
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_active = False 
+        if commit:
+            user.save()
+        return user
 
 
 class ChangeUserForm(UserChangeForm):

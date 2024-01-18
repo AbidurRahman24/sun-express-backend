@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<form style="width:50% ; margin : auto" method="post">
+<form style="width:50% ; margin : auto" method="post" enctype="multipart/form-data">
     <h1>Add Article page</h1>
     {% csrf_token %}
 {{form | crispy}}

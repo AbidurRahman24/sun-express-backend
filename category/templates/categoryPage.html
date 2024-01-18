@@ -34,7 +34,6 @@
           {% for post in data %}
           <div class="col-sm-6">
               <div class="card-body" >
-                <img src="{{post.image.url}}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title">{{post.headline}}</h5>
                 <p class="card-text">{{post.body|truncatewords:150}}</p>
