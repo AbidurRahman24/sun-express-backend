@@ -5,6 +5,8 @@ router = DefaultRouter()
 
 router.register('', views.ViewerViewset) 
 urlpatterns = [
+    path('user/<int:user_id>/', views.UserDetailView.as_view(), name='user-detail'),
+    # path('user/', views.UserProfileViewSet.as_view({'get': 'list'}), name='profile'),
     path('register/', views.UserRegistrationApiView.as_view(), name='register'),
     path('login/', views.UserLoginApiView.as_view(), name='login'),
     path('logout/', views.UserLogoutView.as_view(), name='logout'),

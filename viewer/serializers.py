@@ -7,6 +7,10 @@ class ViewerSerializer(serializers.ModelSerializer):
         model = models.Viewer
         fields = '__all__'
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = '__all__'
 
 class RegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(required = True)

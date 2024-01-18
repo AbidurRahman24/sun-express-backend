@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
 from . import models
 from . import serializers
@@ -13,7 +13,8 @@ from rest_framework.authtoken.models import Token
 # for sending email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.shortcuts import redirect
+from rest_framework import status
+
 
 # class UserReg(APIView):
 #     def post(self, request):
@@ -23,8 +24,14 @@ class ViewerViewset(viewsets.ModelViewSet):
     queryset = models.Viewer.objects.all()
     serializer_class = serializers.ViewerSerializer
 
+class UserDetailView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        serializer = serializers.UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserRegistrationApiView(APIView):
+    queryset = models.User.objects.all()
     serializer_class = serializers.RegistrationSerializer
     
     def post(self, request):

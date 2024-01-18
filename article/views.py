@@ -39,10 +39,11 @@ class articleForSpecific(filters.BaseFilterBackend):
         if article_id:
             return query_set.filter(article_id = article_id)
         return query_set
+    
+
 class ReviewViewset(viewsets.ModelViewSet):
-    # user = 
+    
     queryset = models.Review.objects.all()
-    # print("This",queryset)
     serializer_class = serializers.ReviewSerializer
     filter_backends = [filters.SearchFilter]
     filter_backends = [articleForSpecific]
