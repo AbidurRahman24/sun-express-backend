@@ -147,7 +147,7 @@ class ReviewViewset(viewsets.ModelViewSet):
 @login_required
 def add_article(request):
     if request.method == 'POST':
-        post_form = forms.AritcleForm(request.POST)
+        post_form = forms.AritcleForm(request.POST, request.FILES)
         if post_form.is_valid():
             editor_instance, created = Editor.objects.get_or_create(user=request.user)
             post_form.instance.editor = editor_instance
@@ -156,6 +156,7 @@ def add_article(request):
     else:
         post_form = forms.AritcleForm()
     return render(request, 'add_article.html', {'form': post_form})
+
 @login_required
 def edit_article(request, id):
     post = get_object_or_404(models.Article, pk=id) 
@@ -171,16 +172,6 @@ def edit_article(request, id):
             return redirect('homepage')
 
     return render(request, 'add_article.html', {'form': post_form, 'post': post})
-# def edit_article(request, id):
-#     article = models.Article.objects.get(pk=id) 
-#     article_form = forms.AritcleForm(instance=article)
-#     if request.method == 'POST':
-#         article = forms.AritcleForm(request.POST, instance=article) 
-#         if article_form.is_valid():
-#             article_form.save() 
-#             return redirect('homepage')
-    
-#     return render(request, 'add_article.html', {'form' : article_form})
 
 def delete_article(request, id):
     article = models.Article.objects.get(pk=id) 

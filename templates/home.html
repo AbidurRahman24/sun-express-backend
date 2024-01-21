@@ -83,7 +83,7 @@
                     {% for post in TotalData %}
                     <div class="col-md-6">
                       <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded" >
-                        <img src="{{post.image.url}}." class="card-img-top" alt="...">
+                        <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
                             class="text-decoration-none text-dark hover:text-decoration outline-info">{{post.headline | truncatewords:7}}</a></h5>

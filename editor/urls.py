@@ -3,7 +3,7 @@ from django.urls import path, include
 from . import views
 router = DefaultRouter() # amader router
 
-router.register('list', views.EditorViewset) # router er antena
+# router.register('list', views.EditorViewset) # router er antena
 
 urlpatterns = [
     path('register/', views.register, name='register'),
