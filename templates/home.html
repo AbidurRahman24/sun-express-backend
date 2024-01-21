@@ -2,33 +2,123 @@
 {% load static %}
 {% block content %}
 <div class="container">
-
-
   <div class="row">
     <div class="col-md-12">
       <div class="row">
-        <h4>{{data | length}} results found</h4>
-        <div class="col-md-9">
-          <div class="d-flex flex-wrap m-2 pt-5">
-            {% for post in data %}
-            <div class="col-sm-6">
-              <div class="card-body">
-                <img src="{{ article.image.url }}" alt="">
-                <div class="card-body">
-                  <h5 class="card-title">{{post.headline}}</h5>
-                  <p class="card-text">{{post.body|truncatewords:50}}</p>
-                  <p>Author : {{post.editor.user.first_name}}</p>
-                  <p>Category : {{post.category.name}}</p>
-                  <button class="btn btn-info"><a href="{% url 'detail_article' post.id %}"
-                    class="text-decoration-none text-dark">View Details</a></button>
-                  {% if request.user.is_staff %}
-                  <a href="{% url 'edit_article' post.id %}" class="btn btn-warning">Edit</a>
-                  <a href="{% url 'delete_article' post.id %}" class="btn btn-danger">Delete</a>
-                  {% endif %}
+        <div class="d-flex gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
+          <!-- This is top section category -->
+          {% for data in category %}
+          <a target="_blank" href="{% url 'category_wise_post' data.slug %}"
+            class="text-decoration-none text-dark">{{data.name}}</a>
+          {% endfor %}
+        </div>
+        <!-- This is home page -->
+        <div class="col-md-12">
+          <div class="d-flex flex-wrap">
+            <div class="row">
+              <div class="col-md-3  border-end border-3">
+                <!-- This is first left side collum -->
+                {% for post in sports_posts %}
+                <div class="card mb-3">
+                  <div class="row g-0 p-2">
+                    <div class="col-md-7">
+                      <h5 class=""><small><a href="{% url 'detail_article' post.id %}"
+                            class="text-decoration-none text-dark link-hover">{{post.headline|truncatewords:5}}</a></small>
+                      </h5>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="card-body">
+                        <img src="{{ post.image.url }}" class="img-fluid rounded-start" alt="...">
+                      </div>
+                    </div>
+                    <small>{{post.body|truncatewords:20 }}</small>
+                    <small>{{post.publishing_time|timesince }} ago</small>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+
+
+              <!-- This post -->
+              <!-- This is first middle side collum -->
+              <div class="col-md-7 border-end border-3">
+                <div class="d-flex flex-wrap">
+                  <!-- this is top section -->
+                  {% for post in data %}
+                  <div class="col-sm-12 ">
+                    <div class="card mb-3">
+                      <div class="row g-0 shadow bg-body rounded">
+                        <div class="col-md-5 ">
+                          <img src="{{ post.image.url }}" class="card-img-top mx-auto" alt="..." style="width:100%;">
+                          <div class="p-2">
+                            <p>
+                              Category : {% for cat in post.category.all %}
+                              <button class="btn btn-primary btn-sm m-1" disabled>{{cat.name}} </button>
+                              {% endfor %}
+                              </p>
+                            <p class="card-text"><small class="text-muted">Author : {{post.editor.user.first_name}}
+                                {{post.editor.user.last_name}}</small></p>
+
+                            {% if request.user.is_staff %}
+                            <a href="{% url 'edit_article' post.id %}" class="btn btn-outline-info">Edit</a>
+                            <a href="{% url 'delete_article' post.id %}" class="btn btn-outline-danger">Delete</a>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
+                                class="text-decoration-none text-dark link-hover">{{post.headline}}</a></h5>
+                            <p class="card-text"><small>{{post.body|truncatewords:50}}</small></p>
+                            <small>{{post.publishing_time|timesince }} ago</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+
+                  <!-- this is second top section -->
+                  <div class="row">
+                    {% for post in TotalData %}
+                    <div class="col-md-6">
+                      <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded" >
+                        <img src="{{post.image.url}}." class="card-img-top" alt="...">
+                        <div class="card-body">
+                          <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
+                            class="text-decoration-none text-dark hover:text-decoration outline-info">{{post.headline | truncatewords:7}}</a></h5>
+                          <p class="card-text">{{post.body | truncatewords:20}}</p>
+                        </div>
+                        <ul class="list-group list-group-flush px-3">
+                          <small>{{post.publishing_time|timesince }} ago</small>
+                        </ul>
+                        <div class="card-body">
+                          {% if request.user.is_staff %}
+                            <a class="btn btn-outline-info" href="{% url 'edit_article' post.id %}" >Edit</a>
+                            <a class='btn btn-outline-danger' href="{% url 'delete_article' post.id %}" >Delete</a>
+                            {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+
                 </div>
               </div>
+              <!-- This is first right side collum -->
+              <div class="col-md-2 ">
+                {% for post in random_data %}
+                <div class="card p-2 my-2 shadow bg-body">
+                  <small><a href="{% url 'detail_article' post.id %}"
+                      class="text-decoration-none text-pramary link-hover">{{post.headline}}</a></small>
+                </div>
+                <!-- Other post details -->
+                {% endfor %}
+              </div>
+
             </div>
-            {% endfor %}
+
           </div>
         </div>
       </div>

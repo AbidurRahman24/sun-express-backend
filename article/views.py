@@ -39,6 +39,7 @@ class articleForSpecific(filters.BaseFilterBackend):
         if article_id:
             return query_set.filter(article_id = article_id)
         return query_set
+    
 @method_decorator(login_required, name='dispatch')
 class DetailArticleView(DetailView):
     model = models.Article
@@ -73,7 +74,15 @@ class DetailArticleView(DetailView):
     model = models.Article
     pk_url_kwarg = 'id'
     template_name = 'article_details.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        current_category = self.object.category
+        related_articles = models.Article.objects.filter(category=current_category).exclude(pk=self.object.pk)[:2]
+        context['related_articles'] = related_articles
+        return context
+    
+    
     def post(self, request, *args, **kwargs):
         comment_form = forms.CommentForm(data=self.request.POST)
         post = self.get_object()
@@ -161,7 +170,7 @@ def edit_article(request, id):
             post_form.save()
             return redirect('homepage')
 
-    return render(request, 'edit_article.html', {'form': post_form, 'post': post})
+    return render(request, 'add_article.html', {'form': post_form, 'post': post})
 # def edit_article(request, id):
 #     article = models.Article.objects.get(pk=id) 
 #     article_form = forms.AritcleForm(instance=article)

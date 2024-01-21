@@ -159,8 +159,12 @@ def user_login(request):
 
 @login_required
 def profile(request):
-    data = User.objects.filter(instance = request.user)
-    return render(request, 'profile.html', {'data' : data})
+    try:
+        data = models.Editor.objects.get(user=request.user)
+    except models.Editor.DoesNotExist:
+        data = None
+
+    return render(request, 'profile.html', {'data': data})
 
 @login_required
 def edit_profile(request):
