@@ -28,6 +28,6 @@ urlpatterns = [
     path('editor/', include('editor.urls')),
     path('category/', include('category.urls')),
     path('article/', include('article.urls')),
-    re_path(r'^.*$', TemplateView.as_view(template_name='404.html'), name='catch_all'),
+    # re_path(r'^.*$', TemplateView.as_view(template_name='404.html'), name='catch_all'),
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
