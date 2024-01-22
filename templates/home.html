@@ -6,13 +6,13 @@
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-12">
-        <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
-          <!-- This is top section category -->
-          {% for data in category %}
-          <a target="_blank" href="{% url 'category_wise_post' data.slug %}"
-            class="text-decoration-none text-dark">{{data.name}}</a>
-          {% endfor %}
-        </div>
+          <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
+            <!-- This is top section category -->
+            {% for data in category %}
+            <a target="_blank" href="{% url 'category_wise_post' data.slug %}"
+              class="text-decoration-none text-dark">{{data.name}}</a>
+            {% endfor %}
+          </div>
         </div>
         <!-- This is home page -->
         <div class="col-md-12">
@@ -36,12 +36,12 @@
                     <small>{{post.body|truncatewords:20 }}</small>
                     <small>
                       <p>Last updated {% if post.last_updated %}
-                      {{ post.last_updated|timesince }}
-                      {% else %}
-                      {{ data.publishing_time|timesince }}
-                      {% endif %}
-                    </p>
-                  </small>
+                        {{ post.last_updated|timesince }}
+                        {% else %}
+                        {{ data.publishing_time|timesince }}
+                        {% endif %}
+                      </p>
+                    </small>
                   </div>
                 </div>
                 {% endfor %}
@@ -64,7 +64,7 @@
                               Category : {% for cat in post.category.all %}
                               <button class="btn btn-primary btn-sm m-1" disabled>{{cat.name}} </button>
                               {% endfor %}
-                              </p>
+                            </p>
                             <p class="card-text"><small class="text-muted">Author : {{post.editor.user.first_name}}
                                 {{post.editor.user.last_name}}</small></p>
 
@@ -79,7 +79,10 @@
                             <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
                                 class="text-decoration-none text-dark link-hover">{{post.headline}}</a></h5>
                             <p class="card-text"><small>{{post.body|truncatewords:50}}</small></p>
-                            <small>                <p>Last updated {% if data.last_updated %}{{ post.last_updated|timesince }}{% else %}{{ post.publishing_time|timesince }}{% endif %}</p></small>
+                            <small>
+                              <p>Last updated {% if post.last_updated %}{{ post.last_updated|timesince }}{% else %}{{
+                                post.publishing_time|timesince }}{% endif %}</p>
+                            </small>
                           </div>
                         </div>
                       </div>
@@ -91,26 +94,29 @@
                   <div class="row">
                     {% for post in TotalData %}
                     <div class="col-md-6">
-                      <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded" >
+                      <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded">
                         <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
-                            class="text-decoration-none text-dark hover:text-decoration outline-info">{{post.headline | truncatewords:7}}</a></h5>
+                              class="text-decoration-none text-dark outline-info" onMouseOver="this.style.color='#0F0'"
+                              onMouseOut="this.style.color='#00F'">{{post.headline | truncatewords:7}}</a></h5>
                           <p class="card-text">{{post.body | truncatewords:20}}</p>
                         </div>
                         <ul class="list-group list-group-flush px-3">
-                          <small><p>Last updated {% if post.last_updated %}
-                            {{ post.last_updated|timesince }}
-                            {% else %}
-                            {{ data.publishing_time|timesince }}
-                            {% endif %}
-                          </p></small>
+                          <small>
+                            <p>Last updated {% if post.last_updated %}
+                              {{ post.last_updated|timesince }}
+                              {% else %}
+                              {{ data.publishing_time|timesince }}
+                              {% endif %}
+                            </p>
+                          </small>
                         </ul>
                         <div class="card-body">
                           {% if request.user.is_staff %}
-                            <a class="btn btn-outline-info" href="{% url 'edit_article' post.id %}" >Edit</a>
-                            <a class='btn btn-outline-danger' href="{% url 'delete_article' post.id %}" >Delete</a>
-                            {% endif %}
+                          <a class="btn btn-outline-info" href="{% url 'edit_article' post.id %}">Edit</a>
+                          <a class='btn btn-outline-danger' href="{% url 'delete_article' post.id %}">Delete</a>
+                          {% endif %}
                         </div>
                       </div>
                     </div>

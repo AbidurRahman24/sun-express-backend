@@ -4,9 +4,7 @@ from . import models
 from . import serializers
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
-from rest_framework.response import Response
 from rest_framework import filters
-from rest_framework import generics
 from . import forms
 from . import models
 from editor.models import Editor

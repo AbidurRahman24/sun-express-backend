@@ -4,11 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="card mb-3">
+            <div class="card mb-3 p-4">
+                <h5 class="card-title py-3">{{article.headline}}</h5>
                 <img src="{{ article.image.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
                     
-                    <h5 class="card-title">{{article.headline}}</h5>
+                    
                     <p class="card-text">{{article.body}}</p>
                     <p class="card-text"><small class="text-body-secondary">Author : {{article.editor.user.first_name}}
                             {{article.editor.user.last_name}}</small></p>
@@ -30,25 +31,34 @@
     </div>
 
 
-<div class="card m-2">
-    <h5 class="p-3">Total Review : {{comments | length}}</h5>
-    <p class="p-3">Average Rating: {{ average_rating }}</p>
-    {% for rating in comments %}
-    <div class="card-body border m-2">
-        <p>Rating: {{rating.rating}}</p>
-        <p><b>{{rating.name}}</b><br> Rating Time: {{rating.created_on}}</p>
-        <p>Comment: {{rating.body}}</p>
-    </div>
-    {% endfor %}
-</div>
-<div class="card m-2">
-    <div class="card-body">
-        <form method="post">
-            <h1>Add Comment</h1>
-            {% csrf_token %}
-            {{comment_form | crispy}}
-
-            <button class="btn btn-warning">Submit</button>
+<div class="row">
+    <div class="d-flex flex-wrap">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="p-3">Total Review : {{comments | length}}</h5>
+                <p class="p-3">Average Rating: {{ average_rating }}</p>
+                {% for rating in comments %}
+                <div class="card-body border m-2">
+                    <p>Rating: {{rating.rating}}</p>
+                    <p><b>{{rating.name}}</b><br> Rating Time: {{rating.created_on}}</p>
+                    <p>Comment: {{rating.body}}</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <h1>Add Review</h1>
+                        {% csrf_token %}
+                        {{comment_form | crispy}}
+            
+                        <button class="btn btn-warning">Submit</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </div>
