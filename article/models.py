@@ -10,10 +10,18 @@ class Article(models.Model):
     body = models.TextField()
     category = models.ManyToManyField(Category)
     publishing_time = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     ratings = models.IntegerField(default=0)
     editor = models.ForeignKey(Editor, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='article/images/', null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        update_last_updated = kwargs.pop('update_last_updated', True)
+        
+        if update_last_updated or not self.pk: 
+            self.last_updated = timezone.now()
+
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.headline
     

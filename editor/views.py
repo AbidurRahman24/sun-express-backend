@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from . import models
 from . import serializers
-
+from article.models import Article
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.tokens import default_token_generator
@@ -23,7 +23,7 @@ from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth import authenticate, login , update_session_auth_hash, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from article.models import Article
+
 # Create your views here.
 # class EditorViewset(viewsets.ModelViewSet):
 #     queryset = models.Editor.objects.all()
@@ -148,12 +148,10 @@ def user_login(request):
 
 @login_required
 def profile(request):
-    try:
-        data = models.Editor.objects.get(user=request.user)
-    except models.Editor.DoesNotExist:
-        data = None
+        editor = models.Editor.objects.get(user=request.user)
+        article = Article.objects.filter(editor = editor)
 
-    return render(request, 'profile.html', {'data': data})
+        return render(request, 'profile.html', {'data': editor, "article":article})
 
 @login_required
 def edit_profile(request):

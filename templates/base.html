@@ -69,11 +69,12 @@
   <!-- pop up box for message -->
   {% for message in messages %}
   <script>
+
     document.addEventListener('DOMContentLoaded', function () {
       Swal.fire({
         title: 'Status!',
         text: '{{ message }}',
-        icon: 'info',  // Adjust this part based on your data structure
+        icon: 'icon',  
         confirmButtonText: 'Okay'
       });
     });

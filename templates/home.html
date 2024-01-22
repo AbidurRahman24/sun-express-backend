@@ -5,12 +5,14 @@
   <div class="row">
     <div class="col-md-12">
       <div class="row">
-        <div class="d-flex gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
+        <div class="col-md-12">
+        <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
           <!-- This is top section category -->
           {% for data in category %}
           <a target="_blank" href="{% url 'category_wise_post' data.slug %}"
             class="text-decoration-none text-dark">{{data.name}}</a>
           {% endfor %}
+        </div>
         </div>
         <!-- This is home page -->
         <div class="col-md-12">
@@ -32,7 +34,14 @@
                       </div>
                     </div>
                     <small>{{post.body|truncatewords:20 }}</small>
-                    <small>{{post.publishing_time|timesince }} ago</small>
+                    <small>
+                      <p>Last updated {% if post.last_updated %}
+                      {{ post.last_updated|timesince }}
+                      {% else %}
+                      {{ data.publishing_time|timesince }}
+                      {% endif %}
+                    </p>
+                  </small>
                   </div>
                 </div>
                 {% endfor %}
@@ -70,7 +79,7 @@
                             <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
                                 class="text-decoration-none text-dark link-hover">{{post.headline}}</a></h5>
                             <p class="card-text"><small>{{post.body|truncatewords:50}}</small></p>
-                            <small>{{post.publishing_time|timesince }} ago</small>
+                            <small>                <p>Last updated {% if data.last_updated %}{{ post.last_updated|timesince }}{% else %}{{ post.publishing_time|timesince }}{% endif %}</p></small>
                           </div>
                         </div>
                       </div>
@@ -90,7 +99,12 @@
                           <p class="card-text">{{post.body | truncatewords:20}}</p>
                         </div>
                         <ul class="list-group list-group-flush px-3">
-                          <small>{{post.publishing_time|timesince }} ago</small>
+                          <small><p>Last updated {% if post.last_updated %}
+                            {{ post.last_updated|timesince }}
+                            {% else %}
+                            {{ data.publishing_time|timesince }}
+                            {% endif %}
+                          </p></small>
                         </ul>
                         <div class="card-body">
                           {% if request.user.is_staff %}

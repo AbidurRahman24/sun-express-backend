@@ -3,34 +3,53 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div>
-
-</div>
-{% if data %}
-<div class="container mt-5">
+<div class="container mt-2">
   <h2 class="text-center">Profile</h2>
-
-  <div class="card mx-auto p-3 shadow" style="max-width: 300px;">
-    <img src="{% static 'images/profile.jpg' %}" alt="John" class="card-img-top" style="border-radius: 25%;">
-    <div class="card-body text-center">
-      <h5 class="card-title">Username: {{data.user.username}}</h5>
-      <p class="card-text title">Email: {{data.user.email}}</p>
-      <p class="card-text">Harvard University</p>
-      <div class="mb-3">
-        <a href="#" class="btn btn-outline-dark"><i class="fa fa-dribbble"></i></a>
-        <a href="#" class="btn btn-outline-dark"><i class="fa fa-twitter"></i></a>
-        <a href="#" class="btn btn-outline-dark"><i class="fa fa-linkedin"></i></a>
-        <a href="#" class="btn btn-outline-dark"><i class="fa fa-facebook"></i></a>
+  
+<div class="row">
+  <div class="col-md-4">
+    {% if data %}
+    <div class="card mx-auto p-3 shadow-sm p-3 mb-5 bg-body rounded" style="max-width: 300px;">
+      <img src="{% static 'images/profile.jpg' %}" alt="John" class="card-img-top" style="border-radius: 25%;">
+      <div class="card-body text-center">
+        <h5 class="card-title">Username: {{data.user.username}}</h5>
+        <p class="card-text title">Email: {{data.user.email}}</p>
+        <p class="card-text">Harvard University</p>
+        <div class="mb-3">
+          <a href="#" class="btn btn-outline-dark"><i class="fa fa-dribbble"></i></a>
+          <a href="#" class="btn btn-outline-dark"><i class="fa fa-twitter"></i></a>
+          <a href="#" class="btn btn-outline-dark"><i class="fa fa-linkedin"></i></a>
+          <a href="#" class="btn btn-outline-dark"><i class="fa fa-facebook"></i></a>
+        </div>
+        <a class="btn btn-primary" href="{% url 'edit_profile' %}">
+          Edit Your Profile</a>
       </div>
-      <a class="btn btn-primary" href="{% url 'edit_profile' %}">
-        Edit Your Profile</a>
     </div>
   </div>
-</div>
-<!-- Display other properties from the Editor model as needed -->
-{% else %}
-<p>No profile found for the current user.</p>
-{% endif %}
-</div>
+  <!-- Display other properties from the Editor model as needed -->
+  {% else %}
+  <p>No profile found for the current user.</p>
+  {% endif %}
 
+  <div class="col-md-8">
+    <div class="d-flex flex-wrap">
+    {% for data in article %}
+          <div class="col-md-4">
+            <div class="card ">
+              <img class="card-img" src="{{ data.image.url}}" alt="Card image">
+              <div class="card-body">
+                <h5 class="card-title">{{data.headline}}</h5>
+                <p class="card-text">{{data.body}}</p>
+                <p>Last updated {% if data.last_updated %}{{ data.last_updated|timesince }}{% else %}{{ data.publishing_time|timesince }}{% endif %}</p>
+                <a href="{% url 'edit_article' data.id %}" class="btn btn-outline-info">Edit</a>
+                <a href="{% url 'delete_article' data.id %}" class="btn btn-outline-danger">Delete</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>  
+  </div>
+</div>
+</div>
+</div>
 {% endblock %}

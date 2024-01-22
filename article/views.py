@@ -69,11 +69,12 @@ class DetailArticleView(DetailView):
         context['average_rating'] = round(average_rating, 2) if average_rating else None
         return context
 
-@method_decorator(login_required, name='dispatch')
+
 class DetailArticleView(DetailView):
     model = models.Article
     pk_url_kwarg = 'id'
     template_name = 'article_details.html'
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
