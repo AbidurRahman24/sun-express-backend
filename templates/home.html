@@ -25,7 +25,7 @@
                   <div class="row g-0 p-2">
                     <div class="col-md-7">
                       <h5 class=""><small><a href="{% url 'detail_article' post.id %}"
-                            class="text-decoration-none text-dark link-hover">{{post.headline|truncatewords:5}}</a></small>
+                            class="text-dark ">{{post.headline|truncatewords:5}}</a></small>
                       </h5>
                     </div>
                     <div class="col-md-5">
@@ -77,7 +77,7 @@
                         <div class="col-md-7">
                           <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
-                                class="text-decoration-none text-dark link-hover">{{post.headline}}</a></h5>
+                                class="text-dark">{{post.headline}}</a></h5>
                             <p class="card-text"><small>{{post.body|truncatewords:50}}</small></p>
                             <small>
                               <p>Last updated {% if post.last_updated %}{{ post.last_updated|timesince }}{% else %}{{
@@ -98,7 +98,7 @@
                         <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
-                              class="text-decoration-none text-dark outline-info" onMouseOver="this.style.color='#0F0'"
+                              class="text-dark outline-info" onMouseOver="this.style.color='#0F0'"
                               onMouseOut="this.style.color='#00F'">{{post.headline | truncatewords:7}}</a></h5>
                           <p class="card-text">{{post.body | truncatewords:20}}</p>
                         </div>
