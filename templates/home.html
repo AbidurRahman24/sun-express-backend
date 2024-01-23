@@ -6,9 +6,9 @@
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-12">
-          <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
+          <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-3 bg-body rounded border-bottom border-gray">
             <!-- This is top section category -->
-            {% for data in category %}
+            {% for data in categories %}
             <a target="_blank" href="{% url 'category_wise_post' data.slug %}"
               class="text-decoration-none text-dark">{{data.name}}</a>
             {% endfor %}
@@ -19,8 +19,34 @@
           <div class="d-flex flex-wrap">
             <div class="row">
               <div class="col-md-3  border-end border-3">
-                <!-- This is first left side collum -->
+                <!-- This is sports article first left side collum -->
                 {% for post in sports_posts %}
+                <div class="card mb-3">
+                  <div class="row g-0 p-1">
+                    <div class="col-md-6">
+                      <h5 class=""><small><a href="{% url 'detail_article' post.id %}"
+                            class="text-dark ">{{post.headline|truncatewords:5}}</a></small>
+                      </h5>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <img src="{{ post.image.url }}" class="img-fluid rounded-start" alt="...">
+                      </div>
+                    </div>
+                    <small>{{post.body|truncatewords:20 }}</small>
+                    <small>
+                      <p>Last updated {% if post.last_updated %}
+                        {{ post.last_updated|timesince }}
+                        {% else %}
+                        {{ data.publishing_time|timesince }}
+                        {% endif %}
+                      </p>
+                    </small>
+                  </div>
+                </div>
+                {% endfor %}
+                <!-- this is tech part -->
+                {% for post in tech_posts %}
                 <div class="card mb-3">
                   <div class="row g-0 p-2">
                     <div class="col-md-7">
@@ -55,9 +81,9 @@
                   <!-- this is top section -->
                   {% for post in data %}
                   <div class="col-sm-12 ">
-                    <div class="card mb-3">
+                    <div class="card mb-3" >
                       <div class="row g-0 shadow bg-body rounded">
-                        <div class="col-md-5 ">
+                        <div class="col-md-5 p-2 ">
                           <img src="{{ post.image.url }}" class="card-img-top mx-auto" alt="..." style="width:100%;">
                           <div class="p-2">
                             <p>
@@ -94,7 +120,7 @@
                   <div class="row">
                     {% for post in TotalData %}
                     <div class="col-md-6">
-                      <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded">
+                      <div class="card shadow-none p-2 mb-2 bg-body-tertiary rounded" style="height: 480px;">
                         <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
@@ -121,6 +147,9 @@
                       </div>
                     </div>
                     {% endfor %}
+                    <div>
+                      <img src="{%static  'images/banner.jpg'%}" class="card-img-top" style="height: 100px;" alt="...">
+                    </div>
                   </div>
 
 
@@ -130,8 +159,9 @@
               <div class="col-md-2 ">
                 {% for post in random_data %}
                 <div class="card p-2 my-2 shadow bg-body">
+                  <img src="{{post.image.url}}" class="card-img-top" alt="...">
                   <small><a href="{% url 'detail_article' post.id %}"
-                      class="text-decoration-none text-pramary link-hover">{{post.headline}}</a></small>
+                      class=" text-pramary link-hover">{{post.headline}}</a></small>
                 </div>
                 <!-- Other post details -->
                 {% endfor %}
@@ -144,6 +174,25 @@
       </div>
     </div>
   </div>
-</div>
+  <div class="row">
+      <div class="d-flex flex-wrap gap-3 shadow-sm p-3 mb-5 bg-body rounded border-bottom border-gray">
+        <!-- This is top section category -->
+        {% for data in category %}
+
+        <div class="card bg-dark text-white" >
+          <a href="{% url 'category_wise_post' data.slug %}">
+          <img class="card-img" src="{{data.image.url}}" alt="Card image"  style="opacity: 0.4; ;width: 250px; height: 100px;">
+          <div class="card-img-overlay">
+            <h4 class="card-text"><a class="card-title text-decoration-none text-white" target="_blank" href="{% url 'category_wise_post' data.slug %}"
+              >{{data.name}}</a></h4>
+          <p class="card-text">Lorem ipsum dolor sit.</p>
+            </div>
+          </a>
+          </div>
+        
+        {% endfor %}
+      </div>
+
+  </div>
 </div>
 {% endblock %}

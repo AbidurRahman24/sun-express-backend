@@ -10,8 +10,11 @@ def home(request, category_slug = None):
         category = Category.objects.get(slug = category_slug) 
         data = Article.objects.filter(category  = category) 
     sports_category = Category.objects.get(name='Sports')
-    sports_posts = Article.objects.filter(category=sports_category).order_by('-publishing_time')
-    random_data = Article.objects.all().order_by('?')[:10]
+    tech_category = Category.objects.get(name='Tech')
+    sports_posts = Article.objects.filter(category=sports_category).order_by('-publishing_time')[:4]
+    tech_posts = Article.objects.filter(category=tech_category).order_by('-publishing_time')[:2]
+    random_data = Article.objects.all().order_by('?')[:7]
     categories = Category.objects.all()
-    return render(request, 'home.html', {'sports_posts': sports_posts,'TotalData':TotalData,'data' : data, 'category' : categories,'random_data':random_data})
+    category = Category.objects.all().order_by('?')[:4]
+    return render(request, 'home.html', {'category':category,'tech_posts':tech_posts,'sports_posts': sports_posts,'TotalData':TotalData,'data' : data, 'categories' : categories,'random_data':random_data})
 
