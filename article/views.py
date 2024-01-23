@@ -89,7 +89,7 @@ class DetailArticleView(DetailView):
         post = self.object
         # print(post)
         comments = post.comments.all()
-        category = post.category.all()
+        category = post.category.all()[:2]
         articles_under_category = models.Article.objects.filter(category__in=category).distinct()
         comment_form = forms.CommentForm()
         # print(articles_under_category)
