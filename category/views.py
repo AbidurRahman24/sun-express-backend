@@ -2,10 +2,9 @@ from article.models import Article, Comment
 from category.models import Category
 from django.shortcuts import render, redirect
 from . import forms
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from . import models
 from . import serializers
-from rest_framework import filters
 # Create your views here.
 class ArticleForSpecificCategory(filters.BaseFilterBackend):
     def filter_queryset(self, request, query_set, view):
@@ -32,10 +31,11 @@ def add_category(request):
     return render(request, 'add_category.html', {'form' : category_form})
 
 def category(request, category_slug = None):
-    
+    # print(category_slug)
     data = Article.objects.all() 
     if category_slug is not None: #
         category = Category.objects.get(slug = category_slug) 
         data = Article.objects.filter(category  = category) 
     categories = Category.objects.all()
-    return render(request, 'categoryPage.html', {'data' : data, 'category' : categories})
+    category_slug = category_slug
+    return render(request, 'categoryPage.html', {'data' : data, 'category' : categories, 'category_slug':category_slug})
