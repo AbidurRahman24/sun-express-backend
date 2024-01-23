@@ -38,49 +38,27 @@ class articleForSpecific(filters.BaseFilterBackend):
             return query_set.filter(article_id = article_id)
         return query_set
     
-@method_decorator(login_required, name='dispatch')
-class DetailArticleView(DetailView):
-    model = models.Article
-    pk_url_kwarg = 'id'
-    template_name = 'article_details.html'
-    def post(self, request, *args, **kwargs):
-        comment_form = forms.CommentForm(data=self.request.POST)
-        post = self.get_object()
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.post = post
-            new_comment.save()
-            
-        return self.get(request, *args, **kwargs)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = self.object
-        comments = post.comments.all()
-        comment_form = forms.CommentForm()
-
-        # Calculate the average rating
-        average_rating = comments.aggregate(Avg('rating'))['rating__avg']
-
-        context['comments'] = comments
-        context['comment_form'] = comment_form
-        context['average_rating'] = round(average_rating, 2) if average_rating else None
-        return context
-
 
 class DetailArticleView(DetailView):
     model = models.Article
     pk_url_kwarg = 'id'
+    # print("id", pk_url_kwarg)
     template_name = 'article_details.html'
-    
+
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Access the category associated with the article
+        category = self.object
+        print(category)
+        # Retrieve all articles that belong to the same category
+        related_articles = models.Article.objects.filter(category=category)
 
-        current_category = self.object.category
-        related_articles = models.Article.objects.filter(category=current_category).exclude(pk=self.object.pk)[:2]
+        # Add the related articles to the context
         context['related_articles'] = related_articles
+
         return context
-    
     
     def post(self, request, *args, **kwargs):
         comment_form = forms.CommentForm(data=self.request.POST)
@@ -109,22 +87,21 @@ class DetailArticleView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = self.object
+        # print(post)
         comments = post.comments.all()
+        category = post.category.all()
+        articles_under_category = models.Article.objects.filter(category__in=category).distinct()
         comment_form = forms.CommentForm()
-
+        # print(articles_under_category)
         # Calculate the average rating
         average_rating = comments.aggregate(Avg('rating'))['rating__avg']
 
         context['comments'] = comments
+        context['articles_under_category'] = articles_under_category
         context['comment_form'] = comment_form
         context['average_rating'] = round(average_rating, 2) if average_rating else None
         return context
     
-
-# class ReviewCreateView(generics.CreateAPIView):
-#     queryset = models.Review.objects.all()
-#     serializer_class = serializers.ReviewSerializer
-
 class ReviewViewset(viewsets.ModelViewSet):
     
     queryset = models.Review.objects.all()

@@ -22,6 +22,7 @@ class Article(models.Model):
             self.last_updated = timezone.now()
 
         super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.headline
     

@@ -8,8 +8,8 @@
                 <h5 class="card-title py-3">{{article.headline}}</h5>
                 <img src="{{ article.image.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
-                    
-                    
+
+
                     <p class="card-text">{{article.body}}</p>
                     <p class="card-text"><small class="text-body-secondary">Author : {{article.editor.user.first_name}}
                             {{article.editor.user.last_name}}</small></p>
@@ -22,44 +22,47 @@
                 </div>
             </div>
             <ul>
-                {% for related_article in related_articles %}
-                  <li>{{ related_article.headline }}h</li>
-                  <!-- Display other details as needed -->
-                {% endfor %}
-              </ul>
+                <h2>Related Posts</h2>
+                {% for category in articles_under_category %}
+                    
+                <div class="card">
+                    <a href="{% url 'detail_article' category.id %}">{{ category.headline }}</a>
+
+                </div>
+                    {% endfor %}  
         </div>
     </div>
 
 
-<div class="row">
-    <div class="d-flex flex-wrap">
-        <div class="col-md-6">
-            <div class="card">
-                <h5 class="p-3">Total Review : {{comments | length}}</h5>
-                <p class="p-3">Average Rating: {{ average_rating }}</p>
-                {% for rating in comments %}
-                <div class="card-body border m-2">
-                    <p>Rating: {{rating.rating}}</p>
-                    <p><b>{{rating.name}}</b><br> Rating Time: {{rating.created_on}}</p>
-                    <p>Comment: {{rating.body}}</p>
+    <div class="row">
+        <div class="d-flex flex-wrap">
+            <div class="col-md-6">
+                <div class="card">
+                    <h5 class="p-3">Total Review : {{comments | length}}</h5>
+                    <p class="p-3">Average Rating: {{ average_rating }}</p>
+                    {% for rating in comments %}
+                    <div class="card-body border m-2">
+                        <p>Rating: {{rating.rating}}</p>
+                        <p><b>{{rating.name}}</b><br> Rating Time: {{rating.created_on}}</p>
+                        <p>Comment: {{rating.body}}</p>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
             </div>
-            
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <form method="post">
-                        <h1>Add Review</h1>
-                        {% csrf_token %}
-                        {{comment_form | crispy}}
-            
-                        <button class="btn btn-warning">Submit</button>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">
+                            <h1>Add Review</h1>
+                            {% csrf_token %}
+                            {{comment_form | crispy}}
+
+                            <button class="btn btn-warning">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}

@@ -1,8 +1,7 @@
-from article.models import Article
+from article.models import Article, Comment
 from category.models import Category
 from django.shortcuts import render, redirect
 from . import forms
-
 from rest_framework import viewsets
 from . import models
 from . import serializers
