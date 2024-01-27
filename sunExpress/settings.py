@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'editor',
     'review',
     'viewer',
+    'polls',
     "crispy_forms",
     "crispy_bootstrap5",
 ]

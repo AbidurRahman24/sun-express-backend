@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1 class="mb-5 text-center">{{ question.question_text }}</h1>
+
+        {% if question.choice_set.all %}
+    <ul>
+        {% for choice in choices_with_percentage %}
+            <li>
+                {{ choice.choice_text }}: {{ choice.votes }} votes ({{ choice.percentage|floatformat:2 }}%)
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No choices available.</p>
+{% endif %}
+
+        <a class="btn btn-outline-secondary" href="{% url 'polls:index' %}">Back To Polls</a>
+        <a class="btn btn-outline-info" href="{% url 'polls:detail' question.id %}">Vote again?</a>
+    </div>
+</div>
+{% endblock %}
