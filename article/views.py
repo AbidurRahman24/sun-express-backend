@@ -37,27 +37,37 @@ class articleForSpecific(filters.BaseFilterBackend):
         if article_id:
             return query_set.filter(article_id = article_id)
         return query_set
-    
+@login_required
+def like_post(request, id):
+    post = get_object_or_404(models.Article, pk=id)
+ 
+    try:
+        like = models.Like.objects.get(user=request.user, post=post)
+        like.delete()  
+    except models.Like.DoesNotExist:
+        # If the like doesn't exist, create one to "like" the post
+        models.Like.objects.create(user=request.user, post=post)
+    post.save()
+    return redirect('detail_article', id=id)
 
 class DetailArticleView(DetailView):
     model = models.Article
     pk_url_kwarg = 'id'
-    # print("id", pk_url_kwarg)
     template_name = 'article_details.html'
-
+    context_object_name = 'article'
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
         # Access the category associated with the article
         category = self.object
-        print(category)
+        # print(category)
         # Retrieve all articles that belong to the same category
         related_articles = models.Article.objects.filter(category=category)
 
         # Add the related articles to the context
         context['related_articles'] = related_articles
-
+        
         return context
     
     def post(self, request, *args, **kwargs):
@@ -92,6 +102,10 @@ class DetailArticleView(DetailView):
         category = post.category.all()[:2]
         articles_under_category = models.Article.objects.filter(category__in=category).distinct()
         comment_form = forms.CommentForm()
+
+        user_likes_article = False
+        if self.request.user.is_authenticated:
+            user_likes_article = models.Like.objects.filter(user=self.request.user, post=post).exists()
         # print(articles_under_category)
         # Calculate the average rating
         average_rating = comments.aggregate(Avg('rating'))['rating__avg']
@@ -100,6 +114,8 @@ class DetailArticleView(DetailView):
         context['articles_under_category'] = articles_under_category
         context['comment_form'] = comment_form
         context['average_rating'] = round(average_rating, 2) if average_rating else None
+        context['user_likes_article'] = user_likes_article
+        context['likes_count'] = post.likes_count()
         return context
     
 class ReviewViewset(viewsets.ModelViewSet):

@@ -18,3 +18,4 @@ class ReviewAdmin(admin.ModelAdmin):
     
 admin.site.register(models.Article, ArticleAdmin)
 admin.site.register(models.Review, ReviewAdmin)
+admin.site.register(models.Like )

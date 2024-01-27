@@ -12,6 +12,6 @@ urlpatterns = [
     path('edit/<int:id>', views.edit_article, name='edit_article'),
     path('delete/<int:id>', views.delete_article, name='delete_article'),
     path('details/<int:id>/', views.DetailArticleView.as_view(), name='detail_article'),
+    path('post/<int:id>/', views.like_post, name='like_post'),
     path('', include(router.urls)),
-    # path('articles/<int:article_id>/', SpecificArticleView.as_view(), name='specific_article'),
 ]

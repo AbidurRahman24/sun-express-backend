@@ -15,6 +15,11 @@ class Article(models.Model):
     editor = models.ForeignKey(Editor, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='article/images/', null=True, blank=True)
 
+
+    def likes_count(self):
+        return self.like_set.count()
+    
+    
     def save(self, *args, **kwargs):
         update_last_updated = kwargs.pop('update_last_updated', True)
         
@@ -25,7 +30,7 @@ class Article(models.Model):
         
     def __str__(self):
         return self.headline
-    
+   
 
 class Review(models.Model):
     viewer = models.ForeignKey(Viewer, on_delete = models.CASCADE, default=1)
@@ -46,3 +51,11 @@ class Comment(models.Model):
     
     def __str__(self):
         return f"Comments by {self.name}"
+    
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Article, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.first_name}"
