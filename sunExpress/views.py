@@ -4,6 +4,7 @@ from article.models import Article
 from category.models import Category
 
 def home(request, category_slug = None):
+    
     data = Article.objects.all().order_by('-publishing_time')[:1]
     TotalData = Article.objects.all().order_by('?')[:4]
     if category_slug is not None: #

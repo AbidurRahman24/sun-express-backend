@@ -25,7 +25,9 @@
                   <div class="row g-0 p-1">
                     <div class="col-md-6">
                       <h5 class=""><small><a href="{% url 'detail_article' post.id %}"
-                            class="text-dark ">{{post.headline|truncatewords:5}}</a></small>
+                        style="color: black; text-decoration: none;"
+                        onmouseover="this.style.color='blue'; this.style.textDecoration='underline';"
+                        onmouseout="this.style.color='black'; this.style.textDecoration='none';">{{post.headline|truncatewords:5}}</a></small>
                       </h5>
                     </div>
                     <div class="col-md-6">
@@ -51,7 +53,9 @@
                   <div class="row g-0 p-2">
                     <div class="col-md-7">
                       <h5 class=""><small><a href="{% url 'detail_article' post.id %}"
-                            class="text-dark ">{{post.headline|truncatewords:5}}</a></small>
+                        style="color: black; text-decoration: none;"
+                        onmouseover="this.style.color='blue'; this.style.textDecoration='underline';"
+                        onmouseout="this.style.color='black'; this.style.textDecoration='none';">{{post.headline|truncatewords:5}}</a></small>
                       </h5>
                     </div>
                     <div class="col-md-5">
@@ -104,8 +108,10 @@
                         <div class="col-md-7">
                           <div class="card-body">
                             <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
-                                class="text-dark">{{post.headline}}</a></h5>
-                            <p class="card-text"><small>{{post.body|truncatewords:50}}</small></p>
+                              style="color: black; text-decoration: none;"
+                              onmouseover="this.style.color='blue'; this.style.textDecoration='underline';"
+                              onmouseout="this.style.color='black'; this.style.textDecoration='none';">{{post.headline}}</a></h5>
+                            <p class="card-text"><small>{{post.body|truncatewords:90}}</small></p>
                             <small>
                               <p>Last updated {% if post.last_updated %}{{ post.last_updated|timesince }}{% else %}{{
                                 post.publishing_time|timesince }}{% endif %}</p>
@@ -125,8 +131,9 @@
                         <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title"><a href="{% url 'detail_article' post.id %}"
-                              class="text-dark outline-info" onMouseOver="this.style.color='#0F0'"
-                              onMouseOut="this.style.color='#00F'">{{post.headline | truncatewords:7}}</a></h5>
+                            style="color: black; text-decoration: none;"
+                            onmouseover="this.style.color='blue'; this.style.textDecoration='underline';"
+                            onmouseout="this.style.color='black'; this.style.textDecoration='none';">{{post.headline | truncatewords:7}}</a></h5>
                           <p class="card-text">{{post.body | truncatewords:20}}</p>
                         </div>
                         <ul class="list-group list-group-flush px-3">
@@ -198,7 +205,7 @@
 
   </div>
 
-  <div class="row" >
+  <div class="row" style="background-color: rgb(240, 235, 235);" >
     <h4 class="py-2"><strong>Tech and Sport</strong></h4>
     <div class="col-md-4" >
       {% for post in sports_posts %}
@@ -238,11 +245,11 @@
                      <a href="{% url 'detail_article' post.id %}" class="text-primary link-hover">{{ post.headline }}</a>
                   </p>
               </div>
-          </div>
+              
       {% endif %}
-  {% endfor %}
+      {% endfor %}
+          </div>
     </div>
-  </div>
 
 </div>
 {% endblock %}

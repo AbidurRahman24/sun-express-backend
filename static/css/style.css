@@ -2,6 +2,7 @@
     color: #191e38;
 }
 
-.link-hover:hover {
-    color: #007bff;
+.hover-link:hover {
+    color: blue;
+    text-decoration: underline;
 }
